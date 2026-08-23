@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.bugcat.bcdt.ops.dao.zentao.ZenTaoDao">
+
+
+    <!-- 根据数据id，查询 类型：10 task, 20 bug，30 需求，40 用例 -->
+    <select id="findByObjectId" resultType="cc.bugcat.bcdt.ops.model.TaskWork" parameterType="Long">
+        SELECT tab.*
+        FROM (
+            SELECT t.id AS 'objectId', t.name AS 'objectName', 10 AS 'objectType' FROM zt_task t WHERE t.id = #{objectId}
+          UNION
+            SELECT b.id AS 'objectId', b.title AS 'objectName', 20 AS 'objectType' FROM zt_bug b WHERE b.id = #{objectId}
+          UNION
+            SELECT s.id AS 'objectId', s.title AS 'objectName', 30 AS 'objectType' FROM zt_story s WHERE s.id = #{objectId}
+          UNION
+            SELECT c.id AS 'objectId', c.title AS 'objectName', 40 AS 'objectType' FROM zt_case c WHERE c.id = #{objectId}
+        ) tab
+        ORDER BY tab.objectType
+    </select>
+    
+
+
+    <!-- 根据项目类型，查询项目的成本部门 -->
+    <select id="findProjectByTypeAndIds" resultType="cc.bugcat.bcdt.ops.model.TaskWork" parameterType="object">
+        <if test=" objectType == 10 ">
+            SELECT t.id AS 'objectId', t.name AS 'objectName', '10' AS 'projectType'
+            FROM zt_task t WHERE t.id IN (<include refid="projectIdSql"/>)
+        </if>
+        <if test=" objectType == 20 ">
+            SELECT b.id AS 'objectId', b.title AS 'objectName', '20' AS 'projectType'
+            FROM zt_bug b WHERE b.id IN (<include refid="projectIdSql"/>)
+        </if>
+    </select>
+    
+    <sql id="projectIdSql">
+        <foreach collection="objectIds" item="item" separator=",">#{item,jdbcType=BIGINT}</foreach>
+    </sql>
+
+
+    
+    <sql id="queryAllWorkSql">
+        SELECT t.id AS 'objectId', 10 AS 'objectType', t.name AS 'objectName', t.openedDate AS 'savedate', t.module
+        FROM zt_task t WHERE 1 = 1 AND t.deleted = '0'
+        <if test="objectId != null">AND t.id = #{objectId}</if>
+        <if test="objectId == null">
+            <if test="keyword != null and '' != keyword">AND t.name LIKE CONCAT('%', #{keyword},'%')</if>
+            AND t.openedDate &gt; #{dateStart,jdbcType=TIMESTAMP} AND t.openedDate &lt; #{dateEnd,jdbcType=TIMESTAMP}
+        </if>
+        UNION ALL
+        SELECT b.id AS 'objectId', 20 AS 'objectType', b.title AS 'objectName', b.openedDate AS 'savedate', b.module
+        FROM zt_bug b WHERE 1 = 1 AND b.deleted = '0'
+        <if test="objectId != null">AND b.id = #{objectId}</if>
+        <if test="objectId == null">
+            <if test="keyword != null and '' != keyword">AND b.title LIKE CONCAT('%', #{keyword},'%')</if>
+            AND b.openedDate &gt; #{dateStart,jdbcType=TIMESTAMP} AND b.openedDate &lt; #{dateEnd,jdbcType=TIMESTAMP}
+        </if>
+    </sql>
+
+    
+    <!-- 所有任务数量 -->
+    <select id="findAllWorkCount" resultType="long" parameterType="cc.bugcat.bcdt.ops.openapi.zentao.all.vi.ZenTaoTaskVi">
+        SELECT COUNT(1) FROM ( <include refid="queryAllWorkSql"/> ) tab
+    </select>
+
+    <!-- 所有任务列表 -->
+    <select id="findAllWorkList" resultType="cc.bugcat.bcdt.ops.model.TaskWork" parameterType="cc.bugcat.bcdt.ops.openapi.zentao.all.vi.ZenTaoTaskVi">
+        SELECT tab.* FROM ( <include refid="queryAllWorkSql"/> ) tab
+        ORDER BY tab.savedate DESC
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+    
+    
+    <sql id="findMyItemSql">
+        
+    </sql>
+    
+    <select id="findMyItem" parameterType="cc.bugcat.bcdt.ops.model.TaskWork" resultType="cc.bugcat.bcdt.ops.model.TaskWork">
+        SELECT tab.*
+        FROM (
+            (SELECT t.id AS 'objectId', t.name AS 'objectName', 10 AS 'objectType' FROM zt_task t 
+            WHERE 1 = 1 <if test="objectName != null and '' != objectName"> AND t.name LIKE CONCAT('%', #{objectName}, '%') </if>
+              AND ( 1 = 2 <foreach collection="whereSql['zt_task']" item="item" index="idx" ><if test="idx % 2 == 0"> OR ${item} = #{account}</if><if test="idx % 2 == 1"> AND ${item} BETWEEN #{startTime} AND #{endTime}</if></foreach>) 
+            LIMIT 10)
+        UNION
+            (SELECT b.id AS 'objectId', b.title AS 'objectName', 20 AS 'objectType' FROM zt_bug b
+            WHERE 1 = 1 <if test="objectName != null and '' != objectName"> AND b.title LIKE CONCAT('%', #{objectName}, '%') </if>
+              AND ( 1 = 2 <foreach collection="whereSql['zt_bug']" item="item" index="idx" ><if test="idx % 2 == 0"> OR ${item} = #{account}</if><if test="idx % 2 == 1"> AND ${item} BETWEEN #{startTime} AND #{endTime}</if></foreach>) 
+            LIMIT 10)
+        UNION
+            (SELECT s.id AS 'objectId', s.title AS 'objectName', 30 AS 'objectType' FROM zt_story s
+            WHERE 1 = 1 <if test="objectName != null and '' != objectName"> AND s.title LIKE CONCAT('%', #{objectName}, '%') </if>
+              AND ( 1 = 2 <foreach collection="whereSql['zt_story']" item="item" index="idx" ><if test="idx % 2 == 0"> OR ${item} = #{account}</if><if test="idx % 2 == 1"> AND ${item} BETWEEN #{startTime} AND #{endTime}</if></foreach>) 
+            LIMIT 10)
+        UNION
+            (SELECT c.id AS 'objectId', c.title AS 'objectName', 40 AS 'objectType' FROM zt_case c
+            WHERE 1 = 1 <if test="objectName != null and '' != objectName"> AND c.title LIKE CONCAT('%', #{objectName}, '%') </if>
+              AND ( 1 = 2 <foreach collection="whereSql['zt_case']" item="item" index="idx" ><if test="idx % 2 == 0"> OR ${item} = #{account}</if><if test="idx % 2 == 1"> AND ${item} BETWEEN #{startTime} AND #{endTime}</if></foreach>)
+            LIMIT 10)
+        ) tab
+    </select>
+    
+    
+</mapper>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.bugcat.bcdt.ops.dao.zentao.BcDbProxyDao">
+	
+	<!-- 自动生成代码块，禁止手动修改 start -->
+
+	<sql id="columns">
+		a.id, a.name, a.desc, a.hostaddr, a.localport, a.dbauser, a.dbapwd, a.writeuser, a.writepwd, a.readuser, a.readpwd, a.whiteuser, a.enable
+	</sql>
+	<sql id="where">
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="id != null"> AND a.id = #{id,jdbcType=BIGINT}</if>
+			<if test="name != null and '' != name"> AND a.name = #{name,jdbcType=VARCHAR}</if>
+			<if test="desc != null and '' != desc"> AND a.desc = #{desc,jdbcType=VARCHAR}</if>
+			<if test="hostAddr != null and '' != hostAddr"> AND a.hostaddr = #{hostAddr,jdbcType=VARCHAR}</if>
+			<if test="localPort != null"> AND a.localport = #{localPort,jdbcType=INTEGER}</if>
+			<if test="dbaUser != null and '' != dbaUser"> AND a.dbauser = #{dbaUser,jdbcType=VARCHAR}</if>
+			<if test="dbaPwd != null and '' != dbaPwd"> AND a.dbapwd = #{dbaPwd,jdbcType=VARCHAR}</if>
+			<if test="writeUser != null and '' != writeUser"> AND a.writeuser = #{writeUser,jdbcType=VARCHAR}</if>
+			<if test="writePwd != null and '' != writePwd"> AND a.writepwd = #{writePwd,jdbcType=VARCHAR}</if>
+			<if test="readUser != null and '' != readUser"> AND a.readuser = #{readUser,jdbcType=VARCHAR}</if>
+			<if test="readPwd != null and '' != readPwd"> AND a.readpwd = #{readPwd,jdbcType=VARCHAR}</if>
+			<if test="whiteUser != null and '' != whiteUser"> AND a.whiteuser = #{whiteUser,jdbcType=VARCHAR}</if>
+			<if test="enable != null and '' != enable"> AND a.enable = #{enable,jdbcType=VARCHAR}</if>
+		</trim>
+		AND 1 = 1
+	</sql>
+
+	<!-- end 自动生成代码块，禁止手动修改 -->
+
+	<!-- -->
+	
+	
+</mapper>

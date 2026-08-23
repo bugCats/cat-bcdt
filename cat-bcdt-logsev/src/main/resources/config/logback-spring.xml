@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="false" scanPeriod="1800 seconds" debug="false">
+
+    <springProperty scope="context" name="logPath" source="logging.file.path"/>
+
+    <!-- 控制台打印-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %C{50} - %msg%n</pattern>
+            <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+        </encoder>
+    </appender>
+
+    <!-- 按照每天生成日志文件 -->
+    <appender name="app" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${logPath}/app.%d{yyyy-MM-dd}.log</FileNamePattern>
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %C{50} - %msg%n</pattern>
+            <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+        </encoder>
+    </appender>
+
+
+    <springProfile name="local">
+        <logger name="cc.bugcat" level="info" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+        <root level="WARN">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+    
+    <springProfile name="prod">
+        <logger name="cc.bugcat" level="info" additivity="false">
+            <appender-ref ref="app"/>
+        </logger>
+        <root level="WARN">
+            <appender-ref ref="app"/>
+        </root>
+    </springProfile>
+
+
+</configuration>

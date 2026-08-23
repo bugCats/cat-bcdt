@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- scan默认是true,配置文件修改会自动加载.scanPeriod是监测配置文件的时间.debug是true将打印logback内部 -->
+<configuration scan="false" scanPeriod="60 seconds" debug="false">
+
+    <!-- 自定义变量 -->
+    <springProperty scope="context" name="logPath" source="logging.file.path"/>
+
+    <!-- 控制台打印-->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %C{50} - %msg%n</pattern>
+            <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+        </encoder>
+    </appender>
+
+    <!--每天生成一个日志文件，保存30天的日志文件。-->
+    <appender name="appLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logPath}/app.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %C{50} - %msg%n</pattern>
+            <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+        </encoder>
+    </appender>
+
+    <logger name="javamelody" level="off" additivity="false"></logger>
+
+    <springProfile name="local">
+        <logger name="cc.bugcat" level="info" additivity="false">
+            <appender-ref ref="STDOUT"/>
+        </logger>
+        <root level="WARN">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="dev,test,prod">
+        <logger name="cc.bugcat" level="info" additivity="false">
+            <appender-ref ref="appLog"/>
+        </logger>
+        <root level="WARN">
+            <appender-ref ref="appLog"/>
+        </root>
+    </springProfile>
+    
+</configuration> 

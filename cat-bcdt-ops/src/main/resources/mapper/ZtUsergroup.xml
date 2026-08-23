@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cc.bugcat.bcdt.ops.dao.zentao.ZtUsergroupDao">
+
+    
+    <!-- 获取禅道账号自定义的权限编号，注意：自定义权限编号，约定其描述字段，以#开头 -->
+    <select id="findOperByAccount" parameterType="string" resultType="string">
+        SELECT g.desc FROM zt_usergroup u INNER JOIN zt_group g ON u.group = g.id
+        WHERE u.account = #{account,jdbcType=VARCHAR} AND g.desc LIKE '#%'
+    </select>
+    
+</mapper>

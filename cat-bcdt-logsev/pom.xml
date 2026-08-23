@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>cc.bugcat</groupId>
+		<artifactId>boot-parent</artifactId>
+		<version>1.1</version>
+		<relativePath>../cat-bcdt-core/boot-parent/pom.xml</relativePath>
+	</parent>
+
+	<artifactId>cat-bcdt-logsev</artifactId>
+
+
+	<properties>
+		<maven.compiler.source>25</maven.compiler.source>
+		<maven.compiler.target>25</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+
+	<dependencies>
+
+		<dependency>
+			<groupId>cc.bugcat</groupId>
+			<artifactId>boot-common</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>cc.bugcat</groupId>
+			<artifactId>boot-webflux</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>cc.bugcat</groupId>
+			<artifactId>boot-icache</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ibm.icu</groupId>
+			<artifactId>icu4j</artifactId>
+			<version>78.3</version>
+		</dependency>
+
+	</dependencies>
+
+
+
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<targetPath>./</targetPath>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>cc.bugcat.bcdt.logsev.BcdtLogsevApplication</mainClass>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+			</plugin>
+
+		</plugins>
+	</build>
+
+</project>
