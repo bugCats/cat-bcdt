@@ -19,7 +19,7 @@ public class GenerCtrlTest {
 
     private static final String baseCtrl = "cc.bugcat.acore.webmvc.web.framework.AbstractOpenApiCtrl";
     private static final String baseService = "cc.bugcat.acore.webmvc.web.framework.AbstractOpenApiService";
-    private static final String paramMap = "cc.bugcat.acore.webmvc.web.framework.RequestContext";
+    private static final String requestContext = "cc.bugcat.acore.webmvc.web.framework.RequestContext";
 
     
     private static final Class<?> mainClass = BcdtOpsApplication.class;
@@ -191,7 +191,7 @@ public class GenerCtrlTest {
         sb.append("import java.util.List;");
         sb.append("import cc.bugcat.acore.framework.exception.BusinessException;");
 
-        sb.append("import " + paramMap + ";");
+        sb.append("import " + requestContext + ";");
         sb.append("import " + baseService + ";");
         sb.append("import " + viFile.pkg + "." + viFile.fileName + ";");
         sb.append("import " + voFile.pkg + "." + voFile.fileName + ";");
