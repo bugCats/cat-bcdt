@@ -4,6 +4,7 @@ package cc.bugcat.bcdt.ops.utils;
 import cc.bugcat.acore.framework.cache.spi.InnerCache;
 import cc.bugcat.acore.webmvc.web.RequestContext;
 import cc.bugcat.acore.framework.utils.DateUtil;
+import cc.bugcat.acore.webmvc.web.RequestExtraInfo;
 import cc.bugcat.bcdt.ops.constants.Constants;
 import cc.bugcat.bcdt.ops.constants.Opers;
 import cc.bugcat.bcdt.ops.openapi.user.login.vo.UserInfo;
@@ -54,7 +55,7 @@ public class UserUtil {
      * 获取登录人
      * */
     public static UserInfo getUser(RequestContext context) {
-        return context.getRequestHead().getUserInfo(UserInfo.class);
+        return context.getRequestExtraInfo(RequestExtraInfo.class).getUserInfo(UserInfo.class);
     }
     
     /**
