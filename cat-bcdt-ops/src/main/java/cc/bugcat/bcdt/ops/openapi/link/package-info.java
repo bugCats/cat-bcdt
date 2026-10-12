@@ -46,12 +46,12 @@ package cc.bugcat.bcdt.ops.openapi.link;
  *      空字符串 ‘’，当type=label时，不显示段落的名称。
  *          
  *
- *  title：鼠标移入超链接上，显示的内容，默认是name；
+ *  title：鼠标移入超链接上，显示的title内容，可以为空，默认为label字段值；
  * 
  *  
  *  linkUrl：超链接url；
  *  
- *      多个链接，使用 | 隔开，与name中的 {{ }} 位置、数量一一对应。
+ *      多个链接，使用 | 隔开，与label中的 {{ }} 位置、数量一一对应。
  *      
  *      # 开头，在办公平台页面框架内打开链接；
  *      
