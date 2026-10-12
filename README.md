@@ -51,7 +51,9 @@ Bugcat DevOps Tool —— 面向小微企业研发团队的 DevOps 研发运维�
 
 ## 项目截图
 
-![工作台](images/工作台.png)
+截图位于`docs/images/`：
+
+[工作台](docs/images/工作台.png) [开发工具](docs/images/开发工具.png) [网址导航1](docs/images/超链接1.png) [网址导航2](docs/images/超链接2.png) [日志1](docs/images/日志1.png) [日志2](docs/images/日志2.png) [团队协作1](docs/images/团队协作1.png) [团队协作2](docs/images/团队协作2.png)
 
 <br>
 
